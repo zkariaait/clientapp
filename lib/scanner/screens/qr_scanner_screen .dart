@@ -1,12 +1,39 @@
-import 'package:client_app/models/order.dart';
-import 'package:client_app/thankyou/thanku_page.dart';
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:client_app/models/order.dart';
+import 'package:client_app/thankyou/thanku_page.dart';
 
 class QRCodeScreen extends StatelessWidget {
   final String qrCodeContent;
 
   const QRCodeScreen({Key? key, required this.qrCodeContent}) : super(key: key);
+
+  Future<void> _saveOrderToJson(Order order) async {
+    final orderJson = jsonEncode(order.toJson());
+    final file =
+        File('${(await getApplicationDocumentsDirectory()).path}/order.json');
+    await file.writeAsString(orderJson);
+  }
+
+// √
+  Future<void> readAndPrintOrderJson() async {
+    try {
+      final file =
+          File('${(await getApplicationDocumentsDirectory()).path}/order.json');
+      if (await file.exists()) {
+        final jsonString = await file.readAsString();
+        final decodedJson = jsonDecode(jsonString);
+        print('888\n${decodedJson}');
+      } else {
+        print("Order JSON file not found.");
+      }
+    } catch (e) {
+      print("Error reading the order JSON file: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +43,7 @@ class QRCodeScreen extends StatelessWidget {
     final String formatted = formatter.format(now);
     print(qrCodeContent);
     print('√${order.lastName}');
-// √
+
     return Scaffold(
       body: Container(
         margin: const EdgeInsets.only(top: 20),
@@ -174,7 +201,9 @@ class QRCodeScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 150),
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        readAndPrintOrderJson();
+                        await _saveOrderToJson(order);
                         Navigator.push(
                           context,
                           MaterialPageRoute(

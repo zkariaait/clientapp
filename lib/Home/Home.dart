@@ -22,14 +22,13 @@ const kSampleIcons = [
 const kSampleIconLabels = [
   'History',
   'Refresh',
-  'L4',
+  ' ',
   'Scan',
 ];
 
 class _HomeState extends State<Home> {
   final controller = ScrollController();
   double headerOffset = 0.0;
-
   @override
   void initState() {
     controller.addListener(() {
@@ -176,14 +175,14 @@ class _HomeState extends State<Home> {
                           children: <Widget>[
                             for (var i = 1; i <= 20; i++)
                               Text(
-                                "data $i",
+                                "product $i",
                                 style: const TextStyle(
                                     color: Colors.white, fontSize: 20),
                               ),
                           ],
                         ),
                         title: Text(
-                          'TapToExpand',
+                          'Order',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 20,

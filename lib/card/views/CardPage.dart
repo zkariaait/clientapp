@@ -349,7 +349,7 @@ class _CardPageState extends State<CardPage> {
             ? "Card Holder"
             : cardHolderNameController.text.toUpperCase(),
         cardNumber: cardNumberController.text.isEmpty
-            ? "XXXX XXXX XXXX "
+            ? "XXXX XXXX XXXX XXXX"
             : cardNumberController.text,
       );
     } else if (cardNumber.startsWith('4')) {
@@ -362,7 +362,7 @@ class _CardPageState extends State<CardPage> {
             ? "Card Holder"
             : cardHolderNameController.text.toUpperCase(),
         cardNumber: cardNumberController.text.isEmpty
-            ? "XXXX XXXX XXXX "
+            ? "XXXX XXXX XXXX XXXX"
             : cardNumberController.text,
       );
     } else {
@@ -375,7 +375,7 @@ class _CardPageState extends State<CardPage> {
             ? "Card Holder"
             : cardHolderNameController.text.toUpperCase(),
         cardNumber: cardNumberController.text.isEmpty
-            ? "XXXX XXXX XXXX "
+            ? "XXXX XXXX XXXX XXXX"
             : cardNumberController.text,
       );
     }

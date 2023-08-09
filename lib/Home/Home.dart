@@ -1,9 +1,11 @@
 import 'package:barcode_scan2/barcode_scan2.dart';
+import 'package:client_app/pick%20a%20card/screens/home/accounts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_collapsing_toolbar/flutter_collapsing_toolbar.dart';
 import 'package:tap_to_expand/tap_to_expand.dart';
 
+import '../card/views/CardPage.dart';
 import '../scanner/screens/qr_scanner_screen .dart';
 
 class Home extends StatefulWidget {
@@ -16,13 +18,13 @@ class Home extends StatefulWidget {
 const kSampleIcons = [
   Icons.receipt_long_outlined,
   Icons.wifi_protected_setup_outlined,
-  Icons.add_to_home_screen_outlined,
+  Icons.credit_card,
   Icons.qr_code_scanner_sharp,
 ];
 const kSampleIconLabels = [
   'History',
   'Refresh',
-  ' ',
+  'Cards',
   'Scan',
 ];
 
@@ -122,31 +124,41 @@ class _HomeState extends State<Home> {
                   );
                 },
                 featureOnPressed: (context, index) async {
-                  try {
-                    ScanResult scanResult = await BarcodeScanner.scan();
-                    String qrCode = '';
-                    qrCode = scanResult.rawContent;
+                  if (kSampleIcons[index] == Icons.credit_card) {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
-                            QRCodeScreen(qrCodeContent: qrCode),
+                            AccountsScreen(), // Replace CardPage() with your actual CardPage widget
                       ),
                     );
-                  } on PlatformException catch (e) {
-                    if (e.code == BarcodeScanner.cameraAccessDenied) {
-                      // Handle camera permission denied
-                      print('Camera permission denied');
-                    } else {
-                      // Handle other errors
-                      print('Error: ${e.message}');
+                  } else {
+                    try {
+                      ScanResult scanResult = await BarcodeScanner.scan();
+                      String qrCode = '';
+                      qrCode = scanResult.rawContent;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              QRCodeScreen(qrCodeContent: qrCode),
+                        ),
+                      );
+                    } on PlatformException catch (e) {
+                      if (e.code == BarcodeScanner.cameraAccessDenied) {
+                        // Handle camera permission denied
+                        print('Camera permission denied');
+                      } else {
+                        // Handle other errors
+                        print('Error: ${e.message}');
+                      }
+                    } on FormatException {
+                      // Handle user pressing back button without scanning any QR code
+                      print('User pressed back button');
+                    } catch (e) {
+                      // Handle other exceptions
+                      print('Error: ${e.toString()}');
                     }
-                  } on FormatException {
-                    // Handle user pressing back button without scanning any QR code
-                    print('User pressed back button');
-                  } catch (e) {
-                    // Handle other exceptions
-                    print('Error: ${e.toString()}');
                   }
                 },
               ),
